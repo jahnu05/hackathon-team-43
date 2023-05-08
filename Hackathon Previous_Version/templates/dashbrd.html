@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>My Dashboard</title>
+  <link rel="stylesheet" href="static/style.css">
+
+</head>
+
+<body>
+  <div class="sidebar">
+    <ul>
+      <li><a href="dashbrd.html">Dash Board</a></li>
+      <li><a href="externalhome.html">Log Out</a></li>
+      <button id="addGroupBtn">Add Group</button>
+      <form id="addGroupForm" action="/add_group" method="POST" style="display:none;">
+        <input type="text" name="group">
+        <input type="submit" value="Add">
+      </form>
+      <br>
+      <ul id="groupsList">
+        {% for group in groups %}
+        <li>
+          {{ group }}
+          <form class="add-form" action="/add_group" method="POST">
+            <input type="text" name="group" style="display:none;">
+          </form>
+        </li>
+        {% endfor %}
+      </ul>
+      <script>
+        const addGroupBtn = document.querySelector('#addGroupBtn');
+        const addGroupForm = document.querySelector('#addGroupForm');
+        addGroupBtn.addEventListener('click', () => {
+          addGroupForm.style.display = 'block';
+          const groupsList = document.querySelector('#groupsList');
+          const addButtonLi = groupsList.querySelector('.add-form').parentNode;
+          groupsList.removeChild(addButtonLi);
+        });
+
+        const addForms = document.querySelectorAll('.add-form');
+        addForms.forEach(form => {
+          form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const input = form.querySelector('input[type=text]');
+            const formData = new FormData(form);
+            fetch(form.action, {
+              method: 'POST',
+              body: formData
+            })
+              .then(response => response.text())
+              .then(html => {
+                const listItem = input.parentNode;
+                const list = listItem.parentNode;
+                const newListItem = document.createElement('li');
+                newListItem.innerHTML = html.trim();
+                list.insertBefore(newListItem, listItem.nextSibling);
+                input.value = '';
+              })
+              .catch(error => console.error(error))
+              .finally(() => {
+                const groupsList = document.querySelector('#groupsList');
+                const addButtonLi = groupsList.querySelector('.add-form').parentNode;
+                groupsList.appendChild(addButtonLi);
+              });
+          });
+        });
+      </script>
+      <button id="addFriendBtn">Add Friend</button>
+      <form id="addFriendForm" action="/add_friend" method="POST" style="display:none;">
+        <input type="text" name="friend">
+        <input type="submit" value="Add">
+      </form>
+      <br>
+      <ul id="friendsList">
+        {% for friend in friends %}
+        <li>
+          {{ friend }}
+          <form class="add-form" action="/add_friend" method="POST">
+            <input type="text" name="friend" style="display:none;">
+          </form>
+        </li>
+        {% endfor %}
+      </ul>
+      <script>
+          const addFriendBtn = document.querySelector('#addFriendBtn');
+          const addFriendForm = document.querySelector('#addFriendForm');
+          addFriendBtn.addEventListener('click', () => {
+          addFriendForm.style.display = 'block';
+          const friendsList = document.querySelector('#friendsList');
+          const addButtonLi = friendsList.querySelector('.add-form').parentNode;
+          groupsList.removeChild(addButtonLi);
+          });
+
+          const addForms1 = document.querySelectorAll('.add-form');
+          addForms1.forEach(form => {
+          form.addEventListener('submit', (event) => {
+              event.preventDefault();
+              const input = form.querySelector('input[type=text]');
+              const formData = new FormData(form);
+              fetch(form.action, {
+              method: 'POST',
+              body: formData
+              })
+              .then(response => response.text())
+              .then(html => {
+                  const listItem = input.parentNode;
+                  const list = listItem.parentNode;
+                  const newListItem = document.createElement('li');
+                  newListItem.innerHTML = html.trim();
+                  list.insertBefore(newListItem, listItem.nextSibling);
+                  input.value = '';
+              })
+              .catch(error => console.error(error))
+              .finally(() => {
+                  const friendsList = document.querySelector('#friendsList');
+                  const addButtonLi = friendsList.querySelector('.add-form').parentNode;
+                  friendsList.appendChild(addButtonLi);
+              });
+          });
+          });
+      </script>
+    </ul>
+    <br>
+  </div>
+  <div class="main-content">
+    <div class="dashboard-header">
+      <h1>Dash Board</h1>
+      <!-- <button class="add-expense-btn" onclick=href="{{ url_for('add_expense') }}">Add an Expense</button> -->
+      <button class="add-expense-btn"><a href="{{ url_for('add_expense') }}">Add Expense</a></button>
+    </div>
+    <p>Hello! {{ session['username'] }}</p>
+    <p>Welcome to your dashboard!</p>
+  </div>
+</body>
+
+</html>

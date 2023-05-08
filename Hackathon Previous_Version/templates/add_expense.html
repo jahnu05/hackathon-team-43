@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Add Expense</title>
+  <link rel = "stylesheet" href = "{{ url_for('static', filename = 'style.css') }}"></head>
+<body>
+  <div class="sidebar">
+    <ul>
+      <li><a href="dashbrd.html">Dash Board</a></li>
+      <li><a href="recentactivity.html">Recent Activity</a></li>
+    </ul>
+  </div>
+  <div class="main-content">
+    <h1>Add Expense</h1>
+    <form onsubmit="computeSplit(); return false;">
+      <label for="name">Name of friend or group:</label>
+      <input type="text" id="name" name="name" required>
+      <br>
+      <label for="amount">Total Amount (in rupees):</label>
+      <input type="number" id="amount" name="amount" required>
+      <br>
+      <label for="paid-by">Paid by:</label>
+      <select id="paid-by" name="paid-by">
+        <option value="you">You</option>
+        <option value="friend">Friend</option>
+      </select>
+      <br>
+      <div id="friend-name-div" style="display: none;">
+        <label for="friend-name">Name of friend:</label>
+        <input type="text" id="friend-name" name="friend-name">
+        <br>
+      </div>
+      <input type="submit" value="Submit">
+    </form>
+    <br>
+    <div id="split-results" style="display: none;">
+      <h2>Split Results</h2>
+      <p>You have to pay <span id="you-owe"></span> rupees.</p>
+      <p>Your friend has to pay <span id="friend-owe"></span> rupees.</p>
+    </div>
+  </div>
+  <script>
+    function showHideFriendName() {
+      var paidBySelect = document.getElementById("paid-by");
+      var friendNameDiv = document.getElementById("friend-name-div");
+      if (paidBySelect.value === "friend") {
+        friendNameDiv.style.display = "block";
+      } else {
+        friendNameDiv.style.display = "none";
+      }
+    }
+
+    function computeSplit() {
+      var amountInput = document.getElementById("amount");
+      var paidBySelect = document.getElementById("paid-by");
+      var friendNameInput = document.getElementById("friend-name");
+      var youOweSpan = document.getElementById("you-owe");
+      var friendOweSpan = document.getElementById("friend-owe");
+      var amount = parseFloat(amountInput.value);
+      var youOwe = 0;
+      var friendOwe = 0;
+
+      if (paidBySelect.value === "you") {
+        youOwe = amount / 2;
+        friendOwe = amount / 2;
+      } else {
+        var friendName = friendNameInput.value.trim();
+        youOwe = amount;
+        friendOwe = 0;
+        if (friendName !== "") {
+          friendOwe = amount / 2;
+          youOwe = amount / 2;
+        }
+      }
+
+      youOweSpan.innerText = youOwe.toFixed(2);
+      friendOweSpan.innerText = friendOwe.toFixed(2);
+      document.getElementById("split-results").style.display = "block";
+    }
+  </script>
+</body>
+</html>
