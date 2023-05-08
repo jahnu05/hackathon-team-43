@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>My Dashboard</title>
+  <link rel="stylesheet" href="dashbrdstyle_basic.css">
+  <body>
+    <div class="sidebar">
+        <ul>
+          <li><a href="dashbrd.html">Dash Board</a></li>
+          <li><a href="externalhome.html">Log Out</a></li>
+        </ul>
+    </div>
+    <div class="main-content">
+        <div class="dashboard-header">
+          <h1>Dash Board</h1>
+          <button class="add-expense-btn"><a href="{{ url_for('add_expense') }}">Add Expense</a></button>
+        </div>
+        <p>Hello! {{ session['username'] }}</p>
+        <p>Welcome to your dashboard!</p>
+      </div>
+    </body>
+    
+    </html>
+    
+  </body>
