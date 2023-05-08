@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Split Results</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+	<div class="sidebar">
+		<ul>
+			<li><a href="dashbrd.html">Dash Board</a></li>
+			<li><a href="recentactivity.html">Recent Activity</a></li>
+		</ul>
+	</div>
+	<div class="main-content">
+		<h1>Split Results</h1>
+		<p>You have to pay <span>{{ you_owe }}</span> rupees.</p>
+		<p>Your friend has to pay <span>{{ friend_owe }}</span> rupees.</p>
+		<form method="POST" action="{{ url_for('update_db') }}">
+			<label for="should-pay-to">You should pay to:</label>
+			<select id="should-pay-to" name="should_pay_to">
+				{% for friend in friends %}
+				<option value="{{ friend.id }}">{{ friend.name }}</option>
+				{% endfor %}
+			</select>
+			<br>
+			<label for="amount-to-pay">Amount to pay:</label>
+			<input type="number" id="amount-to-pay" name="amount_to_pay" required>
+			<br>
+			<label for="should-get-from">You should get from:</label>
+			<select id="should-get-from" name="should_get_from">
+				{% for friend in friends %}
+				<option value="{{ friend.id }}">{{ friend.name }}</option>
+				{% endfor %}
+			</select>
+			<br>
+			<label for="amount-to-get">Amount to get:</label>
+			<input type="number" id="amount-to-get" name="amount_to_get" required>
+			<br>
+			<input type="hidden" name="user_id" value="{{ user_id }}">
+			<input type="hidden" name="you_owe" value="{{ you_owe }}">
+			<input type="hidden" name="friend_owe" value="{{ friend_owe }}">
+			<input type="submit" value="Update Database">
+		</form>
+	</div>
+</body>
+</html>

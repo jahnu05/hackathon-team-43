@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>My Dashboard</title>
+  <link rel="stylesheet" href="static/style.css">
+  <style>
+    /* Style the sidebar container and buttons */
+    .sidebar {
+      width: 200px;
+      background-color: lavenderblush;
+      height: 100%;
+      position: fixed;
+      top: 0;
+      left: 0;
+    }
+
+    .sidebar button {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      border: none;
+      background-color: inherit;
+      text-align: left;
+      font-size: 18px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    /* Style the active button */
+    .sidebar button.active {
+      background-color: #555;
+      color: white;
+    }
+
+    body {
+      background-color: pink;
+      background-image: url("static/final.png");
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+
+    /* Style the main content area container */
+    .container {
+      margin-left: 180px;
+      /* Same width as the sidebar */
+      margin-right: 70px;
+      /* Center the container horizontally */
+      padding: 20px;
+      max-width: 950px;
+      /* Set a maximum width for the content */
+    }
+
+    .add-expense-btn {
+      width: 130px;
+      height: 50px;
+      font-size: 15px;
+      transition: width 0.3s, height 0.3s;
+      /* Add a transition effect */
+    }
+
+    .add-expense-btn:hover {
+      width: 120px;
+      /* Increase the width */
+      height: 60px;
+      /* Increase the height */
+    }
+
+    button:hover {
+      width: 120px;
+      /* Increase the width */
+      height: 60px;
+      /* Increase the height */
+    }
+
+    
+  </style>
+</head>
+
+<body>
+  <div class="sidebar">
+    <ul>
+      <li><a href="dashbrd.html">Dash Board</a></li>
+      <li><a href="externalhome.html">Log Out</a></li>
+      <button id="addGroupBtn">Add Group</button>
+      <form id="addGroupForm" action="/add_group" method="POST" style="display:none;">
+        <input type="text" name="group">
+        <input type="submit" value="Add">
+      </form>
+      <br>
+      <ul id="groupsList">
+        {% for group in groups %}
+          <li id="{{group[0]}}">
+            {{ group[1] }}
+            <ul>
+              {% for frnds in group_friends[groups.index(group)] %}
+              <li>{{ frnds }}</li>
+              {% endfor %}
+            </ul>
+          </li>
+          <form class="add-iform" action="/add_group_friend" method="POST">
+            <input type="text" class="form-text" name="name" style="display:none;">
+            <input type="hidden" name="gid" value="{{group[0]}}">
+            <button class="add-f-btn">friends</button>
+          </form>
+        {% endfor %}
+
+      </ul>
+      
+
+      <script>
+
+      </script>
+
+
+      <script>
+       
+      </script>
+      <button id="addFriendBtn">Add Friend</button>
+      <form id="addFriendForm" action="/add_friend" method="POST" style="display:none;">
+        <input type="text" name="friend">
+        <input type="submit" value="Add">
+      </form>
+      <br>
+      <ul id="friendsList">
+        {% for friend in friends %}
+        <li>
+          {{ friend }}
+          <form class="add-form" action="/add_friend" method="POST">
+            <input type="text" name="friend" style="display:none;">
+          </form>
+        </li>
+        {% endfor %}
+      </ul>
+      <script>
+        
+      </script>
+    </ul>
+    <br>
+    <button><a href="login.html">go to login page</a></button>
+  </div>
+  <div class="main-content2" style="opacity:0.98;">
+    <div class="dashboard-header">
+      <h1>Dash Board</h1>
+      <!-- <button class="add-expense-btn" onclick=href="{{ url_for('add_expense') }}">Add an Expense</button> -->
+      <button class="add-expense-btn"><a href="{{ url_for('add_expense') }}">Add Expense</a></button>
+    </div>
+    <p>Hello! {{ session['username'] }}</p>
+    <p>Welcome to your dashboard!</p>
+  </div>
+
+  <script src=" {{ url_for('static', filename='app.js')}} "></script>
+</body>
+
+</html>

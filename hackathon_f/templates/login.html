@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login</title>
+  <style>
+    /* set the page container to a fixed width and center it horizontally */
+    body {
+      background-color: lightblue; /* Set the background color of the window */
+      display: flex;
+      justify-content: center;
+      /* align-items: center; */
+      height: 100vh; /* Set the height to fill the viewport */
+    }
+    
+    .page {
+      background-image: url("static/split2.png");
+      background-color: lightblue; /* Set the background color of the page */
+      width: 80%; /* Set the width of the page */
+      max-width: 800px; /* Set the maximum width of the page */
+      padding: 20px; /* Add some padding to the page content */
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Add a box shadow for visual effect */
+    }
+    input[type="submit"] {
+      padding: 10px 20px; /* Set the initial size of the button */
+      transition: all 0.2s; /* Add a transition effect to the size change */
+    }
+    
+    input[type="submit"]:hover {
+      padding: 15px 25px; /* Increase the size of the button on hover */
+    }
+
+  </style>
+</head>
+<body>
+  <div class="page">
+  <h1 text="blue">Login</h1>
+  <form action="/login" method="POST">
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" required>
+    <br><br>
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required>
+    <br><br>
+    <input type="submit" value="Login">
+  </form>
+</div>
+</body>
+</html>

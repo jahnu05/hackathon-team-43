@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Add Expense</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename = 'style.css') }}">
+</head>
+<style>
+  /* Style the sidebar container and buttons */
+  .sidebar {
+    width: 200px;
+    background-color: pink;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+  }
+
+  img {
+    float: right;
+    width: 700px;
+    height: 500px;
+    margin-left: 200px;
+    margin-top: 30px;
+  }
+
+  .sidebar button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    border: none;
+    background-color: inherit;
+    text-align: left;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  input[type="submit"] {
+    padding: 10px 20px;
+    /* Set the initial size of the button */
+    transition: all 0.2s;
+    /* Add a transition effect to the size change */
+  }
+
+  input[type="submit"]:hover {
+    padding: 15px 25px;
+    /* Increase the size of the button on hover */
+  }
+
+  /* Style the active button */
+  .sidebar button.active {
+    background-color: #555;
+    color: white;
+  }
+
+  body {
+    background-color: lightblue;
+  }
+
+  /* Style the main content area container */
+  .container {
+    background-color: pink;
+    /* Set the background color of the window */
+    display: flex;
+    justify-content: center;
+    /* align-items: center; */
+    height: 100vh;
+    /* Set a maximum width for the content */
+  }
+
+  .add-expense-btn {
+    width: 130px;
+    height: 50px;
+    font-size: 15px;
+    transition: width 0.3s, height 0.3s;
+    /* Add a transition effect */
+  }
+
+  .add-expense-btn:hover {
+    width: 120px;
+    /* Increase the width */
+    height: 60px;
+    /* Increase the height */
+  }
+
+  button:hover {
+    width: 120px;
+    /* Increase the width */
+    height: 60px;
+    /* Increase the height */
+  }
+</style>
+
+<body>
+  <img src="static/split.png">
+  <div class="sidebar">
+    <ul>
+      <li><a href="dashbrd.html">Dash Board</a></li>
+      <li><a href="recentactivity.html">Recent Activity</a></li>
+    </ul>
+  </div>
+  <div class="main-content {{group_friends|length}}" id="{{groups|length}}" >
+    <h1>Add Expense</h1>
+    <form method="POST" action="/add_expense" onsubmit="computeSplit({{ groups|length }}); return false;">
+      <label for="name">Name of group:</label>
+      <select type="text" class="select-group" id="group" name="name" required onchange="friends()">
+        {% for group in groups %}
+          <option value="{{group[1]}}" id="{{group[0]}}">{{group[1]}}</option>
+        {% endfor %}
+      </select>
+      <br>
+      <label for="amount">Total Amount (in rupees):</label>
+      <input type="number" id="amount" name="amount" required>
+      <br>
+      <label for="paid-by">Paid by:</label>
+      <select id="paid-by" name="paid-by" >
+
+      </select>
+      <br>
+      <div id="friend-name-div" style="display: none;">
+        <label for="friend-name">Name of friend:</label>
+        <input type="text" id="friend-name" name="friend-name">
+        <br>
+      </div>
+      <input type="submit" value="Submit">
+    </form>
+    <br>
+    <div id="split-results" style="display: none;">
+      <h2>Split Results</h2>
+      <p>You have to pay <span id="you-owe"></span> rupees.</p>
+      <p>Your friend has to pay <span id="friend-owe"></span> rupees.</p>
+    </div>
+  </div>
+  <script>
+    let length = parseInt(document.querySelector(".main-content").id)
+    console.log(length)
+    function friends(){
+      let id = document.querySelector(".select-group")
+      const selectedOption = id.options[id.selectedIndex];
+      const selectedOptionId = ;
+      document.querySelector("#paid-by").innerHTML = "{% for frnds in group_friends["+(selectedOptionId)+"] %} <option>{{ frnds }}</option>{% endfor %} <option>You</option>"
+    }
+    
+    function computeSplit(n) {
+      var amountInput = document.getElementById("amount");
+      var paidBySelect = document.getElementById("paid-by");
+      var friendNameInput = document.getElementById("friend-name");
+      var youOweSpan = document.getElementById("you-owe");
+      var friendOweSpan = document.getElementById("friend-owe");
+      var amount = parseFloat(amountInput.value);
+      var NewAmount=amount/n;
+      var youOwe = 0;
+      var friendOwe = 0;
+
+      if (paidBySelect.value === "you") {
+        youOwe = 0;
+        friendOwe = amount / n;
+      } else {
+        var friendName = friendNameInput.value.trim();
+        youOwe = amount;
+        friendOwe = 0;
+        if (friendName !== "") {
+          friendOwe = 0;
+          youOwe = amount / n;
+        }
+      }
+
+      youOweSpan.innerText = youOwe.toFixed(2);
+      friendOweSpan.innerText = friendOwe.toFixed(2);
+      document.getElementById("split-results").style.display = "block";
+    }
+  </script>
+</body>
+
+</html>
